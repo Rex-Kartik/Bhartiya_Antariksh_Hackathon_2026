@@ -1,0 +1,27 @@
+# requirements-api.txt — INFERENCE ONLY
+# ========================================
+# Minimal dependencies to run api/main.py.
+# Deliberately excludes training-only packages:
+#   xarray, h5py, pytorch_msssim, scikit-image,
+#   matplotlib, tqdm, pandas, jupyter, etc.
+#
+# Install with:
+#   pip install -r requirements-api.txt
+
+# --- Web framework ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# --- Core inference ---
+numpy==2.1.3
+netCDF4==1.7.2
+
+# --- PyTorch ---
+# NOT pinned here deliberately. The Dockerfile's base image
+# (pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime) already bundles a
+# CUDA-matched torch build. Installing torch again via pip risks pulling
+# the default CPU-only wheel from PyPI and silently breaking GPU support.
+# If running this requirements file OUTSIDE that Docker image (e.g. bare
+# venv), install torch separately first via the official CUDA index:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
